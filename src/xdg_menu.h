@@ -17,7 +17,7 @@
 struct menuitem {
 	char title[128];
 	char command[128];
-	char section[128];
+	char sections[5][32]; 
 };
 
 int parse_menus(struct menuitem **items);

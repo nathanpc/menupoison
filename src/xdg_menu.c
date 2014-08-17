@@ -7,6 +7,7 @@
 
 #include "xdg_menu.h"
 
+void clear_sections_array(struct menuitem item, int n);
 char *trim(char *str);
 int fnlines(char *command);
 
@@ -29,6 +30,7 @@ int parse_menus(struct menuitem **items) {
 		uint8_t tcount = 1;
 		char *ckey;
 		char *token;
+		char sections[128];
 
 		// Parse the line.
 		strtok(line, "\n");  // Remove the trailing newline left by fgets.
@@ -40,13 +42,28 @@ int parse_menus(struct menuitem **items) {
 				if (!strcmp("command", ckey)) {
 					strcpy(_items[icount].command, token);
 				} else if (!strcmp("section", ckey)) {
-					strcpy(_items[icount].section, token);
+					//strcpy(_items[icount].section, token);
+					strcpy(sections, token);
+					printf("%s\n", sections);
 				} else if (!strcmp("title", ckey)) {
 					strcpy(_items[icount].title, token);
 				}
 			}
 
 			token = strtok(NULL, "=\"");
+			tcount++;
+		}
+
+		// Clear the contents of the sections array.
+		clear_sections_array(_items[icount], 5);
+
+		// Split the sections and populate the array.
+		tcount = 0;
+		token = strtok(sections, "/");
+		while ((token != NULL) && (tcount < 5)) {
+			strcpy(_items[icount].sections[tcount], token);
+
+			token = strtok(NULL, "/");
 			tcount++;
 		}
 
@@ -86,6 +103,18 @@ int fnlines(char *command) {
 
 	fclose(file);
 	return lines;
+}
+
+/**
+ * Clears the sections array.
+ *
+ * @param item Menu item struct.
+ * @param n Array size.
+ */
+void clear_sections_array(struct menuitem item, int n) {
+	for (int i = 0; i < n; i++) {
+		item.sections[i][0] = '\0';
+	}
 }
 
 /**

@@ -1,6 +1,6 @@
 /**
  *  menupoison
- *  /
+ *  The ratpoison equivalent for a applications menu.
  *
  *  @author Nathan Campos <nathanpc@dreamintech.net>
  */
@@ -14,7 +14,13 @@ int main(int argc, char **argv) {
 #ifdef DEBUG
 	for (int i = 0; i < nitems; i++) {
 		printf("Title: %s\n", items[i].title);
-		printf("Section: %s\n", items[i].section);
+
+		int j = 0;
+		while (items[i].sections[j][0] != '\0') {
+			printf("Section: %s\n", items[i].sections[j]);
+			j++;
+		}
+
 		printf("Command: %s\n", items[i].command);
 		printf("===============================\n");
 	}
